@@ -41,7 +41,6 @@ jobs:
       - name: 변경된 파일에 대한 eslint 실행
         uses: tj-actions/eslint-changed-files@v25
         with:
-          path: "asdfasdf"
           config_path: "eslint.config.mjs"
           file_extensions: |
             **/*.ts

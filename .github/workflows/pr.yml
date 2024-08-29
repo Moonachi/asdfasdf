@@ -10,5 +10,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: 기여자의 브랜치로 checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: node 설정
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
+      - name: 캐시할 영역 설정
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Dependencies 설치
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          yarn install
+          echo "설치!!!"
+
       - name: 출력
         run: echo "Pull Request"

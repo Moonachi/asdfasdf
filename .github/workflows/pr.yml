@@ -33,5 +33,11 @@ jobs:
           yarn install
           echo "설치!!!"
 
+      - name: 변경된 파일에 대한 eslint 실행
+        uses: tj-actions/eslint-changed-files@v25
+        with:
+          config_path: "./eslint.config.mjs"
+          extra_args: "--max-warnings=0"
+
       - name: 출력
         run: echo "Pull Request"

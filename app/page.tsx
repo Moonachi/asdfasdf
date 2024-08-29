@@ -6,7 +6,7 @@ export default function Home() {
     <main className={styles.main}>
       <div className={styles.description}>
         <p>
-          <code className={styles.code}>app.tsx</code>
+          <code className={styles.code}>app.x</code>
         </p>
         <div>
           <a

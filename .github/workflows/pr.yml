@@ -34,7 +34,9 @@ jobs:
           echo "설치!!!"
 
       - name: ls -al 출력
-        run: ls -al
+        run: |
+          ls -al
+          pwd
 
       - name: 변경된 파일에 대한 eslint 실행
         uses: tj-actions/eslint-changed-files@v25

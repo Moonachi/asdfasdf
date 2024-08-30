@@ -18,34 +18,38 @@ jobs:
           node-version: 20.x
           cache: "yarn"
 
-      - name: 캐시할 영역 설정
-        id: cache
-        uses: actions/cache@v3
-        with:
-          path: "**/node_modules"
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      # - name: 캐시할 영역 설정
+      #   id: cache
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: "**/node_modules"
+      #     key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node-
 
-      - name: Dependencies 설치
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          yarn install
-          echo "설치!!!"
+      # - name: Dependencies 설치
+      #   if: steps.cache.outputs.cache-hit != 'true'
+      #   run: |
+      #     yarn install
+      #     echo "설치!!!"
 
-      - name: ls -al 출력
-        run: |
-          ls -al
-          pwd
+      # - name: 변경된 파일에 대한 eslint 실행
+      #   uses: tj-actions/eslint-changed-files@v23.2.0
+      #   with:
+      #     file_extensions: |
+      #       **/*.ts
+      #       **/*.tsx
+      #     extra_args: "--max-warnings=0"
+      #     token: ${{ secrets.TOKEN }}
 
-      - name: 변경된 파일에 대한 eslint 실행
-        uses: tj-actions/eslint-changed-files@v23.2.0
-        with:
-          file_extensions: |
-            **/*.ts
-            **/*.tsx
-          extra_args: "--max-warnings=0"
-          token: ${{ secrets.TOKEN }}
+      - name: 변경된 파일 가져오기
+        id: changed-files
+        uses: tj-actions/changed-files@v45
 
-      - name: 출력
-        run: echo "Pull Request"
+      - name: 변경된 파일 변수에 담기
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: echo "Linting TypeScript files ${{ env.ALL_CHANGED_FILES }}"
+
+      # - name: 출력
+      #   run: echo "Pull Request"

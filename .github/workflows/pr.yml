@@ -35,13 +35,21 @@ jobs:
             echo "$file was changed"
           done
 
-      # - name: 변경된 파일 변수에 담기
-      #   env:
-      #     ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-      #   run: echo "변경된 파일 리스트 ${{ env.ALL_CHANGED_FILES }}"
+      - name: 변경된 파일이 포함된 패키지 확인
+        run: |
+          PACKAGES=()
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            if [[ "$file" == app/ui/* ]]; then
+              PACKAGES+=("ui")
+            elif [[ "$file" == app/dashboard/* ]]; then
+              PACKAGES+=("dashboard")
+            elif [[ "$file" == app/manager/* ]]; then
+              PACKAGES+=("manager")
+            fi
+          done
 
-      # - name: asd
-      #   run: |
-      #     TS_CHANGED_FILES=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | tr ' ' '\n' | grep -E '\.ts$|\.tsx$' | tr '\n' ' ')
-      #     echo "TS 파일 리스트: $TS_CHANGED_FILES"
-      #     echo "TS_CHANGED_FILES=$TS_CHANGED_FILES" >> $GITHUB_ENV
+          # 중복 제거
+          UNIQUE_PACKAGES=($(echo "${PACKAGES[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
+
+          echo "변경된 패키지: ${UNIQUE_PACKAGES[@]}"
+          echo "UNIQUE_PACKAGES=${UNIQUE_PACKAGES[@]}" >> $GITHUB_ENV

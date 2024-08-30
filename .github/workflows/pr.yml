@@ -46,6 +46,7 @@ jobs:
             **/*.ts
             **/*.tsx
           extra_args: "--max-warnings=0"
+          token: ${{ secrets.TOKEN }}
 
       - name: 출력
         run: echo "Pull Request"

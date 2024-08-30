@@ -1,6 +1,6 @@
 import Image from "next/image";
 import styles from "./page.module.css";
-console.log();
+cosole.log();
 
 export default function Home() {
   return (

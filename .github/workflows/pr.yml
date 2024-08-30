@@ -51,6 +51,16 @@ jobs:
               break
             fi
           done
-
           echo "변경된 패키지: ${PACKAGES[@]}"
           echo "UNIQUE_PACKAGES=${PACKAGES[@]}" >> $GITHUB_ENV
+
+      - name: tsc 검사
+        run: |
+          # IFS를 설정하여 배열 요소를 줄 단위로 분리합니다
+          IFS=' ' read -r -a PACKAGES <<< "${{ env.UNIQUE_PACKAGES }}"
+
+          # 각 패키지에 대해 lint 및 tsc 검사를 수행합니다
+          for package in "${PACKAGES[@]}"; do
+            echo "Type-checking package: $package"
+            yarn "$package" tsc
+          done

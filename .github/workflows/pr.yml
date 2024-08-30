@@ -18,22 +18,22 @@ jobs:
           node-version: 20.x
           cache: "yarn"
 
-      - name: 변경된 파일 가져오기
+      - name: 변경된 .ts, .tsx 파일 가져오기
         id: changed-files
         uses: tj-actions/changed-files@v45
-
-      - name: TS 파일만 필터링하여 변수에 담기
-        id: filter-ts-files
-        run: |
-          TS_CHANGED_FILES=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | tr ' ' '\n' | grep -E '\.ts$|\.tsx$' | tr '\n' ' ')
-          echo "TS 파일 리스트: $TS_CHANGED_FILES"
-        env:
-          TS_CHANGED_FILES: ${{ steps.filter-ts-files.outputs.TS_CHANGED_FILES }}
+        with:
+          files: |
+            **.ts 
+            **.tsx
 
       - name: TS_CHANGED_FILES 확인
-        run: echo "TS_CHANGED_FILES 환경 변수 값 ${{ env.TS_CHANGED_FILES }}"
+        if: steps.changed-markdown-files.outputs.any_changed == 'true'
         env:
-          TS_CHANGED_FILES: ${{ steps.filter-ts-files.outputs.TS_CHANGED_FILES }}
+          TS_CHANGED_FILES: ${{ steps.changed-markdown-files.outputs.all_changed_files }}
+        run: |
+          for file in ${TS_CHANGED_FILES}; do
+            echo "$file was changed"
+          done
 
       # - name: 변경된 파일 변수에 담기
       #   env:

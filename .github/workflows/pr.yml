@@ -22,7 +22,28 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v45
 
-      - name: 변경된 파일 변수에 담기
+      - name: TS 파일만 필터링하여 변수에 담기
+        id: filter-ts-files
+        run: |
+          TS_CHANGED_FILES=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | tr ' ' '\n' | grep -E '\.ts$|\.tsx$' | tr '\n' ' ')
+          echo "TS 파일 리스트: $TS_CHANGED_FILES"
         env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: echo "변경된 파일 리스트 ${{ env.ALL_CHANGED_FILES }}"
+          TS_CHANGED_FILES: ${{ steps.filter-ts-files.outputs.TS_CHANGED_FILES }}
+
+      - name: TS_CHANGED_FILES 확인
+        run: echo "TS_CHANGED_FILES 환경 변수 값 ${{ env.TS_CHANGED_FILES }}"
+        env:
+          TS_CHANGED_FILES: ${{ steps.filter-ts-files.outputs.TS_CHANGED_FILES }}
+          
+      # - name: 변경된 파일 변수에 담기
+      #   env:
+      #     ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+      #   run: echo "변경된 파일 리스트 ${{ env.ALL_CHANGED_FILES }}"
+
+      # - name: asd
+      #   run: |
+      #     TS_CHANGED_FILES=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | tr ' ' '\n' | grep -E '\.ts$|\.tsx$' | tr '\n' ' ')
+      #     echo "TS 파일 리스트: $TS_CHANGED_FILES"
+      #     echo "TS_CHANGED_FILES=$TS_CHANGED_FILES" >> $GITHUB_ENV
+
+|

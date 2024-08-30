@@ -1,7 +1,8 @@
 {
   "extends": "next/core-web-vitals",
   "rules": {
-    "no-undef": "error",
-    "no-unused-vars": "error"
+    "no-undef": "error", // 오탈자를 잡기 위함, ex) consol.log
+    "no-unused-vars": "error", // 사용하지 않는 변수 
+    "no-redeclare": "error" // 변수 이름 중복 사용 
   }
 }

@@ -23,13 +23,13 @@ jobs:
         uses: tj-actions/changed-files@v45
         with:
           files: |
-            **.ts 
+            **.ts
             **.tsx
 
       - name: TS_CHANGED_FILES 확인
-        if: steps.changed-markdown-files.outputs.any_changed == 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         env:
-          TS_CHANGED_FILES: ${{ steps.changed-markdown-files.outputs.all_changed_files }}
+          TS_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
           for file in ${TS_CHANGED_FILES}; do
             echo "$file was changed"

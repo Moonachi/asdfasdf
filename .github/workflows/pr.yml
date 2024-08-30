@@ -39,17 +39,18 @@ jobs:
         run: |
           PACKAGES=()
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            if [[ "$file" == app/ui/* ]]; then
+            if [[ ! " ${PACKAGES[@]} " =~ " ui " && "$file" == app/ui/* ]]; then
               PACKAGES+=("ui")
-            elif [[ "$file" == app/dashboard/* ]]; then
+            elif [[ ! " ${PACKAGES[@]} " =~ " dashboard " && "$file" == app/dashboard/* ]]; then
               PACKAGES+=("dashboard")
-            elif [[ "$file" == app/manager/* ]]; then
+            elif [[ ! " ${PACKAGES[@]} " =~ " manager " && "$file" == app/manager/* ]]; then
               PACKAGES+=("manager")
+            fi
+
+            if [[ ${#PACKAGES[@]} -eq 3 ]]; then
+              break
             fi
           done
 
-          # 중복 제거
-          UNIQUE_PACKAGES=($(echo "${PACKAGES[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
-
-          echo "변경된 패키지: ${UNIQUE_PACKAGES[@]}"
-          echo "UNIQUE_PACKAGES=${UNIQUE_PACKAGES[@]}" >> $GITHUB_ENV
+          echo "변경된 패키지: ${PACKAGES[@]}"
+          echo "UNIQUE_PACKAGES=${PACKAGES[@]}" >> $GITHUB_ENV

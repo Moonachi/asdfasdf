@@ -25,4 +25,4 @@ jobs:
       - name: 변경된 파일 변수에 담기
         env:
           ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: echo "Linting TypeScript files ${{ env.ALL_CHANGED_FILES }}"
+        run: echo "변경된 파일 리스트 ${{ env.ALL_CHANGED_FILES }}"

@@ -45,7 +45,7 @@ jobs:
           file_extensions: |
             **/*.ts
             **/*.tsx
-          extra_args: "--max-warnings=0 --no-warn-ignored"
+          extra_args: "--max-warnings=0"
           token: ${{ secrets.TOKEN }}
 
       - name: 출력
